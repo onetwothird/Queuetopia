@@ -27,8 +27,9 @@ export const metadata: Metadata = {
   description:
     'Queue up processes, run them through FCFS, SJF, SRTF, Priority, or Round Robin, and see the resulting schedule, waiting times, and CPU utilization.',
   icons: {
-    icon: '/logo.png', 
-    apple: '/logo.png', 
+    // The ?v=2 forces the browser to ignore its cache and fetch the new image
+    icon: '/logo.png?v=2', 
+    apple: '/logo.png?v=2', 
   },
   openGraph: {
     images: ['/logo.png'], 
