@@ -6,7 +6,7 @@ import { ArrowDown, Cpu, Activity, FastForward, GitCommit, Layers, Clock } from 
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-[#050505] text-white selection:bg-white selection:text-black">
+    <main className="min-h-screen text-white selection:bg-white selection:text-black">
       
       <section className="relative h-svh flex flex-col justify-center px-6 md:px-12 overflow-hidden">
         <div className="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)]" />
