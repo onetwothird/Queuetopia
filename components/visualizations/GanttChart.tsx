@@ -13,24 +13,26 @@ const PROCESS_COLORS = [
 export default function GanttChart({ timeline, result }: { timeline: TimelineEvent[], result: SimulationResult }) {
   if (!timeline || timeline.length === 0) return null;
   const totalTime = timeline[timeline.length - 1].end;
-  const timeSteps = Array.from(new Set(timeline.map(t => t.start).concat(totalTime))).sort((a, b) => a - b);
+  // Every block boundary (start + end of every block) gets its own tick + label,
+  // matching the ruled, hand-drawn look where each number lines up under the edge.
+  const timeSteps = Array.from(new Set(timeline.flatMap(t => [t.start, t.end]))).sort((a, b) => a - b);
 
   return (
     <div className="bg-transparent p-6 border border-white/10 space-y-12">
-      
+
       <div>
         <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-8">04. Timeline</h2>
-        
+
         {/* Timeline Blocks */}
         <div className="flex w-full h-16 overflow-hidden border border-white/20 bg-[#0a0a0a]">
           {timeline.map((event, idx) => {
             const widthPercent = ((event.end - event.start) / totalTime) * 100;
             const isIdle = event.process === 'idle';
             const colorClass = isIdle ? 'bg-transparent text-white/30' : PROCESS_COLORS[(event.process as number) % PROCESS_COLORS.length];
-            
+
             return (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className={`flex items-center justify-center border-r border-[#050505] last:border-0 min-w-8 ${colorClass}`}
                 style={{ width: `${Math.max(widthPercent, 2)}%` }}
               >
@@ -42,13 +44,20 @@ export default function GanttChart({ timeline, result }: { timeline: TimelineEve
           })}
         </div>
 
-        {/* Time Markers */}
-        <div className="relative h-12 border-t border-white/20 mt-2">
+        {/* Ruled Time Markers — a vertical tick drops from every block edge
+            down to its time value, like lines on a ruler. */}
+        <div className="relative h-12">
           {timeSteps.map((time) => {
             const positionPercent = (time / totalTime) * 100;
+            const isEdge = time === 0 || time === totalTime;
             return (
-              <div key={`step-${time}`} className="absolute top-2 -ml-2" style={{ left: `${positionPercent}%` }}>
-                <span className="text-xs font-mono text-white/60">{time}</span>
+              <div
+                key={`step-${time}`}
+                className="absolute top-0 flex flex-col items-center"
+                style={{ left: `${positionPercent}%`, transform: 'translateX(-50%)' }}
+              >
+                <div className={`w-px ${isEdge ? 'h-3 bg-white/40' : 'h-2 bg-white/25'}`} />
+                <span className="text-xs font-mono text-white/60 mt-1 whitespace-nowrap">{time}</span>
               </div>
             );
           })}
