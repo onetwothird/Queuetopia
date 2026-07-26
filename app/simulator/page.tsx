@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Process, SimulationResult } from '@/lib/types';
-import { simulateFCFS } from '@/lib/algorithms';
+import { runSimulation } from '@/lib/algorithms';
 import AlgorithmSelect from '@/components/simulator/AlgorithmSelect';
 import ProcessForm from '@/components/simulator/ProcessForm';
 import ProcessTable from '@/components/simulator/ProcessTable';
@@ -44,12 +44,12 @@ export default function SimulatorPage() {
 
   const handleSimulate = () => {
     if (processes.length === 0) return;
-    setResult(simulateFCFS(processes));
+    setResult(runSimulation(algorithm, processes, timeQuantum));
   };
 
   return (
     <main className="min-h-screen pt-32 pb-24 bg-[#050505] selection:bg-white selection:text-black">
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
