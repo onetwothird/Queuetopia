@@ -30,7 +30,7 @@ const algorithms = [
   },
   {
     id: 'priority_np',
-    name: 'Non-Preemptive Priority',
+    name: 'Priority Scheduling (Non-Preemptive)',
     classification: 'Non-Preemptive',
     image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80&grayscale',
     abstract: 'This algorithm assigns an explicit priority integer to each process, allocating the CPU to the highest-priority process until it voluntarily yields or completes.',
@@ -38,7 +38,7 @@ const algorithms = [
   },
   {
     id: 'priority_p',
-    name: 'Preemptive Priority',
+    name: 'Priority Scheduling (Preemptive)',
     classification: 'Preemptive',
     image: 'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?auto=format&fit=crop&w=800&q=80&grayscale',
     abstract: 'The preemptive iteration of priority scheduling immediately interrupts a running process if a new process arrives with a strictly higher priority classification.',
@@ -53,13 +53,77 @@ const algorithms = [
     details: 'The ready queue is treated as a circular structure. If a process burst exceeds the defined time quantum, the process is preempted and appended to the tail of the ready queue. The performance of RR depends heavily on the size of the time quantum. If the quantum is infinitely large, RR reduces to FCFS. If it is extremely small, the context-switching overhead dominates CPU utilization. Response time is strictly bounded.',
   },
   {
+    id: 'hrrn',
+    name: 'Highest Response Ratio Next (HRRN)',
+    classification: 'Non-Preemptive',
+    image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80&grayscale',
+    abstract: 'HRRN is a non-preemptive scheduling discipline designed to balance the trade-off between the efficiency of SJF and the fairness of FCFS by dynamically computing a response ratio for every waiting process.',
+    details: 'The response ratio is calculated as (waiting time + burst time) / burst time. As a process waits longer, its ratio climbs, eventually rivaling or exceeding that of freshly arrived short jobs. This self-correcting mechanic effectively prevents the indefinite starvation that plagues pure SJF, while still favoring shorter jobs when queue conditions are otherwise equal.',
+  },
+  {
     id: 'mlq',
-    name: 'Multi-Level Queue (MLQ)',
-    classification: 'Hybrid',
+    name: 'Multilevel Queue (MLQ)',
+    classification: 'Depends',
     image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=800&q=80&grayscale',
     abstract: 'MLQ partitions the ready queue into several distinct sub-queues, permanently assigning processes to a specific queue based on inherent properties like process type or origin.',
     details: 'Each distinct queue possesses its own scheduling algorithm. For instance, foreground (interactive) processes might utilize Round Robin for rapid responsiveness, while background (batch) processes might employ FCFS. Scheduling must also occur between the queues themselves, typically implemented as absolute preemptive priority (e.g., foreground strictly over background) or through proportional time-slicing among the queues.',
-  }
+  },
+  {
+    id: 'mlfq',
+    name: 'Multilevel Feedback Queue (MLFQ)',
+    classification: 'Preemptive',
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80&grayscale',
+    abstract: 'MLFQ extends the multilevel queue model by allowing processes to migrate between priority tiers based on observed CPU behavior, rather than fixing them to a single queue for their entire lifetime.',
+    details: 'New processes enter the topmost queue, which is granted the shortest time quantum. Should a process fail to complete within that slice, it is demoted to a lower-priority queue with a longer quantum, reflecting its classification as more CPU-bound. Interactive, I/O-heavy processes tend to complete quickly within the high-priority tiers and rarely get demoted, giving the scheduler adaptive responsiveness without requiring any prior knowledge of burst lengths.',
+  },
+  {
+    id: 'lottery',
+    name: 'Lottery Scheduling',
+    classification: 'Preemptive',
+    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80&grayscale',
+    abstract: 'Lottery Scheduling reframes CPU allocation as a probabilistic raffle: each process holds a number of tickets proportional to its desired share of the processor, and a winning ticket is drawn at every scheduling decision.',
+    details: 'Because selection is randomized, the algorithm avoids the pathological starvation scenarios that can arise in strictly deterministic schedulers, while still honoring proportional shares on average over many rounds. Processes with heavier ticket allocations run more frequently, and additional tickets can be transferred between cooperating processes to implement priority inheritance.',
+  },
+  {
+    id: 'stride',
+    name: 'Stride Scheduling',
+    classification: 'Preemptive',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80&grayscale',
+    abstract: 'Stride Scheduling delivers the same proportional-share guarantees as Lottery Scheduling but replaces randomness with a fully deterministic bookkeeping mechanism.',
+    details: 'Every process is assigned a stride value inversely proportional to its ticket count, and a running pass counter that increases by its stride each time it is scheduled. The scheduler always selects the process with the lowest pass value, ensuring that CPU time is distributed with far less variance than the lottery approach while preserving the same proportional-fairness properties.',
+  },
+  {
+    id: 'guaranteed',
+    name: 'Guaranteed Scheduling',
+    classification: 'Preemptive',
+    image: 'https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?auto=format&fit=crop&w=800&q=80&grayscale',
+    abstract: 'Guaranteed Scheduling makes an explicit promise to every process: over time, each of the n active processes will receive approximately 1/n of the available CPU time.',
+    details: 'The scheduler continuously tracks how much CPU time each process has actually received versus how much it is owed, then dispatches whichever process has fallen furthest behind its guaranteed share. This produces a self-balancing allocation that adapts automatically as processes arrive and depart the system.',
+  },
+  {
+    id: 'fairshare',
+    name: 'Fair Share Scheduling',
+    classification: 'Preemptive',
+    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80&grayscale',
+    abstract: 'Fair Share Scheduling extends the guaranteed-allocation principle beyond individual processes to groups of processes, ensuring that CPU time is divided fairly among users or departments rather than treating every process as an independent competitor.',
+    details: "A user or group that spawns many processes should not be able to dominate the CPU simply by virtue of having more runnable tasks. The scheduler therefore allocates a share to each group first, and only then divides that group's share among its own member processes, preventing any single owner from crowding out others regardless of process count.",
+  },
+  {
+    id: 'edf',
+    name: 'Earliest Deadline First (EDF)',
+    classification: 'Preemptive',
+    image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=800&q=80&grayscale',
+    abstract: 'Earliest Deadline First is a dynamic-priority, preemptive scheduling policy built for real-time systems, in which the process with the closest completion deadline is always given the CPU.',
+    details: "Priorities are recomputed continuously as deadlines approach, so a process's urgency automatically increases relative to its peers over time. EDF is provably optimal for meeting deadlines on a single processor when total system utilization remains within capacity, though it degrades unpredictably under overload conditions, where multiple deadlines may be missed in a cascading fashion.",
+  },
+  {
+    id: 'rms',
+    name: 'Rate Monotonic Scheduling (RMS)',
+    classification: 'Preemptive',
+    image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80&grayscale',
+    abstract: "Rate Monotonic Scheduling assigns fixed, static priorities to periodic real-time tasks based purely on how frequently they must run: the shorter a task's period, the higher its priority.",
+    details: 'Because priorities never change once assigned, RMS is simpler to analyze and implement than dynamic schemes like EDF. Its schedulability can be verified in advance using well-established utilization bounds, making it a popular choice for hard real-time systems such as embedded controllers, where predictability and low scheduling overhead are paramount.',
+  },
 ];
 
 export default function ResourcesPage() {
@@ -81,7 +145,7 @@ export default function ResourcesPage() {
         <div className="border border-white/10 p-8 md:p-12 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-8 opacity-10 font-mono text-9xl leading-none pointer-events-none">∑</div>
           <h2 className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-8">01. Evaluative Metrics</h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
               <h3 className="text-lg font-medium text-white mb-2">Turnaround Time</h3>
@@ -108,10 +172,10 @@ export default function ResourcesPage() {
 
       <section className="max-w-5xl mx-auto px-6 md:px-12 space-y-16">
         <h2 className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-8 border-b border-white/10 pb-4">02. Algorithm Specifications</h2>
-        
+
         {algorithms.map((algo) => (
-          <motion.article 
-            key={algo.id} 
+          <motion.article
+            key={algo.id}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -120,8 +184,8 @@ export default function ResourcesPage() {
           >
             <div className="w-full lg:w-1/3 aspect-4/3 relative border border-white/10 overflow-hidden">
               <div className="absolute inset-0 bg-[#050505]/40 group-hover:bg-transparent transition-colors duration-700 z-10" />
-              <Image 
-                src={algo.image} 
+              <Image
+                src={algo.image}
                 alt={`${algo.name} architectural representation`}
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
@@ -136,11 +200,11 @@ export default function ResourcesPage() {
                   {algo.classification}
                 </span>
               </div>
-              
+
               <p className="text-sm font-medium text-white/80 leading-relaxed mb-6 border-l-2 border-white/20 pl-4">
                 {algo.abstract}
               </p>
-              
+
               <p className="text-sm text-white/50 leading-relaxed text-justify">
                 {algo.details}
               </p>
