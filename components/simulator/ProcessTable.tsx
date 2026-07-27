@@ -103,7 +103,6 @@ export default function ProcessTable({ processes, algorithm, onDelete, onSimulat
               ))}
             </div>
 
-            {/* Body rows */}
             <div role="rowgroup" className="font-mono text-sm">
               {processes.map((p) => (
                 <div
