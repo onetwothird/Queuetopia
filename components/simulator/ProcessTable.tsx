@@ -86,7 +86,6 @@ export default function ProcessTable({ processes, algorithm, onDelete, onSimulat
       ) : (
         <div className="overflow-x-auto">
           <div role="table" className="min-w-full">
-            {/* Header row */}
             <div
               role="row"
               className="grid gap-x-4 sm:gap-x-6 border-b border-white/10 pb-4"
