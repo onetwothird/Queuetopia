@@ -38,7 +38,6 @@ export default function Navigation() {
         className="w-full fixed top-0 z-50 px-6 md:px-12 py-8 flex justify-between items-center pointer-events-auto transition-colors"
       >
         <Link href="/" onClick={closeMenu} className="relative z-50 flex items-center">
-          {/* Changed from h-10 to w-24 to let a stacked square logo scale up properly */}
           <Image 
             src="/logo.png" 
             alt="QueueTopia Logo" 
