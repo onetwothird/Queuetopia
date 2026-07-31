@@ -140,8 +140,8 @@ Every algorithm operates on the same `Process` shape:
 
 ```ts
 {
-  timeline: TimelineEvent[],   // { process: number | 'idle', start, end }[]
-  processes: Process[]         // each annotated with completion, turnaround, waiting, response, startTime
+  timeline: TimelineEvent[],  
+  processes: Process[]         
 }
 ```
 
