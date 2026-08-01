@@ -608,10 +608,6 @@ export function simulateFairShare(processes: Process[], quantum: number): Simula
   return { timeline: mergeTimeline(timeline), processes: byIdAsc(procs) };
 }
 
-// ---------------------------------------------------------------------------
-// Dispatcher
-// ---------------------------------------------------------------------------
-
 export function runSimulation(algorithm: Algorithm | string, processes: Process[], quantum: number): SimulationResult {
   switch (algorithm) {
     case 'fcfs':
