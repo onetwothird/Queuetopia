@@ -1,20 +1,17 @@
 import { SimulationResult, TimelineEvent } from '@/lib/types';
 
-// Vibrant, contrasting colors that pop against the #050505 background
 const PROCESS_COLORS = [
-  'bg-white text-black',         // P0
-  'bg-[#3b82f6] text-white',     // P1 - Blue
-  'bg-[#10b981] text-white',     // P2 - Emerald
-  'bg-[#f43f5e] text-white',     // P3 - Rose
-  'bg-[#f59e0b] text-white',     // P4 - Amber
-  'bg-[#8b5cf6] text-white',     // P5 - Violet
+  'bg-white text-black',       
+  'bg-[#3b82f6] text-white',  
+  'bg-[#10b981] text-white',     
+  'bg-[#f43f5e] text-white',    
+  'bg-[#f59e0b] text-white',    
+  'bg-[#8b5cf6] text-white',    
 ];
 
 export default function GanttChart({ timeline, result }: { timeline: TimelineEvent[], result: SimulationResult }) {
   if (!timeline || timeline.length === 0) return null;
   const totalTime = timeline[timeline.length - 1].end;
-  // Every block boundary (start + end of every block) gets its own tick + label,
-  // matching the ruled, hand-drawn look where each number lines up under the edge.
   const timeSteps = Array.from(new Set(timeline.flatMap(t => [t.start, t.end]))).sort((a, b) => a - b);
 
   return (
@@ -23,7 +20,6 @@ export default function GanttChart({ timeline, result }: { timeline: TimelineEve
       <div>
         <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-8">04. Timeline</h2>
 
-        {/* Timeline Blocks */}
         <div className="flex w-full h-16 overflow-hidden border border-white/20 bg-[#0a0a0a]">
           {timeline.map((event, idx) => {
             const widthPercent = ((event.end - event.start) / totalTime) * 100;
@@ -44,8 +40,6 @@ export default function GanttChart({ timeline, result }: { timeline: TimelineEve
           })}
         </div>
 
-        {/* Ruled Time Markers — a vertical tick drops from every block edge
-            down to its time value, like lines on a ruler. */}
         <div className="relative h-12">
           {timeSteps.map((time) => {
             const positionPercent = (time / totalTime) * 100;
@@ -64,7 +58,6 @@ export default function GanttChart({ timeline, result }: { timeline: TimelineEve
         </div>
       </div>
 
-      {/* Metrics Footer */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-white/10">
         {[
           { label: 'Avg Turnaround', value: `${(result.processes.reduce((acc, p) => acc + p.turnaround, 0) / result.processes.length).toFixed(2)}ms` },
