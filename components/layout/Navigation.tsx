@@ -48,7 +48,6 @@ export default function Navigation() {
           />
         </Link>
         
-        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-12 text-[10px] font-bold tracking-[0.2em] text-white/70 uppercase">
           <Link href="/simulator" className="hover:text-white transition-colors">Simulator</Link>
           <Link href="/resources" className="hover:text-white transition-colors">Resources</Link>
@@ -57,7 +56,6 @@ export default function Navigation() {
           </a>
         </div>
 
-        {/* Mobile Hamburger Toggle */}
         <button 
           onClick={toggleMenu}
           className="md:hidden relative z-50 text-white p-2 -mr-2"
@@ -67,7 +65,6 @@ export default function Navigation() {
         </button>
       </motion.nav>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
