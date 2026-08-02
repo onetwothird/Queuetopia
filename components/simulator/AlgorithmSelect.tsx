@@ -7,7 +7,6 @@ interface Props {
   setTimeQuantum: (tq: number) => void;
 }
 
-// Algorithms whose scheduling decision is made every fixed time slice / quantum
 const QUANTUM_ALGORITHMS = ['rr', 'mlq', 'mlfq', 'lottery', 'stride', 'guaranteed', 'fairshare'];
 
 const ALGORITHM_OPTIONS = [
