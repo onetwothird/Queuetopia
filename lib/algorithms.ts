@@ -1,9 +1,5 @@
 import { Process, SimulationResult, TimelineEvent, Algorithm } from './types';
 
-// ---------------------------------------------------------------------------
-// Shared helpers
-// ---------------------------------------------------------------------------
-
 function cloneProcesses(processes: Process[]): Process[] {
   return processes
     .map((p) => ({
@@ -26,8 +22,6 @@ function finalizeIfDone(p: Process, currentTime: number) {
   }
 }
 
-// Merge back-to-back timeline blocks belonging to the same process/idle state
-// so the Gantt chart renders one continuous block instead of many tiny ones.
 function mergeTimeline(timeline: TimelineEvent[]): TimelineEvent[] {
   const merged: TimelineEvent[] = [];
   for (const ev of timeline) {
@@ -44,10 +38,6 @@ function mergeTimeline(timeline: TimelineEvent[]): TimelineEvent[] {
 function byIdAsc(processes: Process[]): Process[] {
   return [...processes].sort((a, b) => a.id - b.id);
 }
-
-// ---------------------------------------------------------------------------
-// FCFS
-// ---------------------------------------------------------------------------
 
 export function simulateFCFS(processes: Process[]): SimulationResult {
   const procs = cloneProcesses(processes);
@@ -72,10 +62,6 @@ export function simulateFCFS(processes: Process[]): SimulationResult {
 
   return { timeline: mergeTimeline(timeline), processes: byIdAsc(procs) };
 }
-
-// ---------------------------------------------------------------------------
-// Generic non-preemptive runner (SJF, Priority-NP, HRRN all plug in here)
-// ---------------------------------------------------------------------------
 
 function simulateNonPreemptive(
   processes: Process[],
@@ -133,11 +119,6 @@ export function simulateHRRN(processes: Process[]): SimulationResult {
     })[0]
   );
 }
-
-// ---------------------------------------------------------------------------
-// Generic preemptive runner, 1ms resolution
-// (SRTF, Priority-P, EDF, RMS all plug in here via a comparator)
-// ---------------------------------------------------------------------------
 
 function simulatePreemptive(
   processes: Process[],
@@ -200,10 +181,6 @@ export function simulateRMS(processes: Process[]): SimulationResult {
   return simulatePreemptive(processes, (a, b) => (a.period ?? Infinity) - (b.period ?? Infinity) || a.id - b.id);
 }
 
-// ---------------------------------------------------------------------------
-// Round Robin
-// ---------------------------------------------------------------------------
-
 export function simulateRR(processes: Process[], quantum: number): SimulationResult {
   const procs = cloneProcesses(processes);
   const n = procs.length;
@@ -248,11 +225,6 @@ export function simulateRR(processes: Process[], quantum: number): SimulationRes
 
   return { timeline: mergeTimeline(timeline), processes: byIdAsc(procs) };
 }
-
-// ---------------------------------------------------------------------------
-// Multilevel Queue: Queue 1 (queueLevel 1) = Round Robin, absolute priority
-// over Queue 2 (queueLevel 2) = FCFS
-// ---------------------------------------------------------------------------
 
 export function simulateMLQ(processes: Process[], quantum: number): SimulationResult {
   const procs = cloneProcesses(processes);
@@ -302,8 +274,6 @@ export function simulateMLQ(processes: Process[], quantum: number): SimulationRe
         completed++;
       }
     } else {
-      // Queue 2 runs FCFS, but only one time unit at a time so Queue 1 can
-      // immediately preempt if a higher-priority process arrives.
       const running = q2[0];
       if (running.startTime === -1) {
         running.startTime = currentTime;
@@ -325,11 +295,6 @@ export function simulateMLQ(processes: Process[], quantum: number): SimulationRe
 
   return { timeline: mergeTimeline(timeline), processes: byIdAsc(procs) };
 }
-
-// ---------------------------------------------------------------------------
-// Multilevel Feedback Queue: 3 tiers. Q0 quantum, Q1 2x quantum, Q2 FCFS.
-// Processes are demoted a tier whenever they exhaust their quantum.
-// ---------------------------------------------------------------------------
 
 export function simulateMLFQ(processes: Process[], baseQuantum: number): SimulationResult {
   const procs = cloneProcesses(processes);
@@ -396,11 +361,6 @@ export function simulateMLFQ(processes: Process[], baseQuantum: number): Simulat
   return { timeline: mergeTimeline(timeline), processes: byIdAsc(procs) };
 }
 
-// ---------------------------------------------------------------------------
-// Lottery Scheduling — weighted random draw among ready processes every
-// quantum. Uses a seeded PRNG so results are reproducible across renders.
-// ---------------------------------------------------------------------------
-
 export function simulateLottery(processes: Process[], quantum: number): SimulationResult {
   const procs = cloneProcesses(processes).map((p) => ({ ...p, tickets: p.tickets && p.tickets > 0 ? p.tickets : 10 }));
   const n = procs.length;
@@ -453,12 +413,6 @@ export function simulateLottery(processes: Process[], quantum: number): Simulati
   return { timeline: mergeTimeline(timeline), processes: byIdAsc(procs) };
 }
 
-// ---------------------------------------------------------------------------
-// Stride Scheduling — deterministic proportional share. Each process has a
-// stride inversely proportional to its tickets; lowest accumulated "pass"
-// value runs next.
-// ---------------------------------------------------------------------------
-
 export function simulateStride(processes: Process[], quantum: number): SimulationResult {
   const BIG_NUMBER = 10000;
   const procs = cloneProcesses(processes).map((p) => ({ ...p, tickets: p.tickets && p.tickets > 0 ? p.tickets : 10 }));
@@ -499,11 +453,6 @@ export function simulateStride(processes: Process[], quantum: number): Simulatio
 
   return { timeline: mergeTimeline(timeline), processes: byIdAsc(procs) };
 }
-
-// ---------------------------------------------------------------------------
-// Guaranteed Scheduling — every process should receive ~1/n of the CPU;
-// whichever process is furthest behind its guaranteed share runs next.
-// ---------------------------------------------------------------------------
 
 export function simulateGuaranteed(processes: Process[], quantum: number): SimulationResult {
   const procs = cloneProcesses(processes);
@@ -551,12 +500,6 @@ export function simulateGuaranteed(processes: Process[], quantum: number): Simul
 
   return { timeline: mergeTimeline(timeline), processes: byIdAsc(procs) };
 }
-
-// ---------------------------------------------------------------------------
-// Fair Share Scheduling — like Guaranteed Scheduling, but the CPU share is
-// first split across groups (Process.priority is repurposed as Group ID)
-// and only then divided among each group's own processes.
-// ---------------------------------------------------------------------------
 
 export function simulateFairShare(processes: Process[], quantum: number): SimulationResult {
   const procs = cloneProcesses(processes);
