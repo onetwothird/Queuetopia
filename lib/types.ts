@@ -2,17 +2,17 @@ export interface Process {
   id: number;
   arrival: number;
   burst: number;
-  priority: number;      // also doubles as "Group ID" for Fair Share Scheduling
-  queueLevel: number;    // used by MLQ: 1 = high-priority RR queue, 2 = low-priority FCFS queue
+  priority: number;     
+  queueLevel: number;   
   remainingBurst: number;
   completion: number;
   turnaround: number;
   waiting: number;
   response: number;
   startTime: number;
-  tickets?: number;      // Lottery / Stride Scheduling
-  deadline?: number;     // Earliest Deadline First
-  period?: number;       // Rate Monotonic Scheduling
+  tickets?: number;     
+  deadline?: number;    
+  period?: number;       
 }
 
 export interface TimelineEvent {
