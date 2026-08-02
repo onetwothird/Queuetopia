@@ -10,11 +10,9 @@ interface Props {
 export default function RrFlow({ timeline, timeQuantum }: Props) {
   if (!timeline || timeline.length === 0) return null;
 
-  // Filter out events to identify preemption points (context switches)
   const contextSwitches = timeline.filter((event, index) => {
     if (index === timeline.length - 1) return false;
     const duration = event.end - event.start;
-    // If the process ran for exactly the time quantum and isn't finished (next event is different)
     return duration === timeQuantum && timeline[index + 1].process !== event.process;
   });
 
