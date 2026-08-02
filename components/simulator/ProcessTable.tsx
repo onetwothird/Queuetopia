@@ -25,8 +25,6 @@ export default function ProcessTable({ processes, algorithm, onDelete, onSimulat
   const showDeadline = algorithm === 'edf';
   const showPeriod = algorithm === 'rms';
 
-  // Single source of truth for header + rows, so widths and cell content
-  // can never drift out of sync with each other.
   const columns: Column[] = [
     { key: 'id', label: 'ID', width: 'minmax(2.75rem,0.6fr)', render: (p) => <span className="text-white">P{p.id}</span> },
     { key: 'arrival', label: 'Arrival', width: 'minmax(4.5rem,1fr)', render: (p) => <span className="text-white/60">{p.arrival}ms</span> },
