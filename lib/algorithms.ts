@@ -299,7 +299,7 @@ export function simulateMLQ(processes: Process[], quantum: number): SimulationRe
 export function simulateMLFQ(processes: Process[], baseQuantum: number): SimulationResult {
   const procs = cloneProcesses(processes);
   const n = procs.length;
-  const quantums = [baseQuantum, baseQuantum * 2]; // Q2 (index 2) has no limit -> FCFS
+  const quantums = [baseQuantum, baseQuantum * 2]; 
   const queues: Process[][] = [[], [], []];
   const arrived = new Set<number>();
   const usedInQuantum = new Map<number, number>();
@@ -349,7 +349,7 @@ export function simulateMLFQ(processes: Process[], baseQuantum: number): Simulat
       continue;
     }
 
-    const quantumForLevel = quantums[levelIdx]; // undefined at the bottom queue (FCFS)
+    const quantumForLevel = quantums[levelIdx];
     if (quantumForLevel !== undefined && (usedInQuantum.get(running.id) || 0) >= quantumForLevel) {
       queues[levelIdx].shift();
       usedInQuantum.set(running.id, 0);
