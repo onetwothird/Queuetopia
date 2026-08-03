@@ -11,7 +11,6 @@ export default function MetricsDisplay({ result, totalTime }: Props) {
 
   const n = result.processes.length;
   
-  // Compute Aggregates
   const avgTurnaround = (result.processes.reduce((acc, p) => acc + p.turnaround, 0) / n).toFixed(2);
   const avgWaiting = (result.processes.reduce((acc, p) => acc + p.waiting, 0) / n).toFixed(2);
   const cpuUtilization = ((result.processes.reduce((acc, p) => acc + p.burst, 0) / totalTime) * 100).toFixed(1);
