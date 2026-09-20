@@ -96,6 +96,16 @@ const HERO_TICKS = [
   { pct: 100, label: 't=21' },
 ];
 
+// Column counts are chosen per family so the gapped grid never leaves a
+// vacant cell on any breakpoint (classic 6 → 3×2, quantum 3 → 1 row of 3,
+// proportional 4 → 2×2, realtime 2 → 1 row of 2).
+const FAMILY_GRID: Record<string, string> = {
+  classic: 'sm:grid-cols-2 lg:grid-cols-3',
+  quantum: 'sm:grid-cols-3 lg:grid-cols-3',
+  proportional: 'sm:grid-cols-2 lg:grid-cols-2',
+  realtime: 'sm:grid-cols-2 lg:grid-cols-2',
+};
+
 function HeroGantt() {
   return (
     <div className="relative" aria-hidden="true">
@@ -416,7 +426,7 @@ export default function HomePage() {
                   <p className="mt-2 text-sm text-white/45">{family.blurb}</p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10 border border-white/10">
+                <div className={`grid grid-cols-1 gap-px bg-white/10 border border-white/10 ${FAMILY_GRID[family.id]}`}>
                   {ALGORITHM_META.filter((a) => a.family === family.id).map((algo, idx) => (
                     <AlgorithmCard key={algo.key} algo={algo} index={idx} />
                   ))}
