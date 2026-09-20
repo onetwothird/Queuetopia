@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:engine": "webpack",
     "start": "next start",
     "lint": "eslint"
   },
@@ -24,6 +25,9 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.11",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5"
+    "ts-loader": "^9.6.2",
+    "typescript": "^5",
+    "webpack": "^5.111.1",
+    "webpack-cli": "^7.2.3"
   }
 }
