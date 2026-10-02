@@ -34,8 +34,12 @@ const QUANTUM_ALGORITHMS = ['rr', 'mlq', 'mlfq', 'lottery', 'stride', 'guarantee
 export default function SimulatorPage() {
   const [processes, setProcesses] = useState<Process[]>([]);
   const [algorithm, setAlgorithm] = useState<string>('fcfs');
-  const [timeQuantum, setTimeQuantum] = useState<number>(2);
+  const [timeQuantumInput, setTimeQuantumInput] = useState<string>('2');
   const [result, setResult] = useState<SimulationResult | null>(null);
+
+  // The input is kept as a string so it can be cleared while editing; the
+  // engine always receives a valid integer, never NaN or 0.
+  const timeQuantum = Math.max(1, Math.trunc(Number(timeQuantumInput)) || 2);
 
   const meta = ALGORITHM_BY_KEY[algorithm];
   const showPreemptionLog = QUANTUM_ALGORITHMS.includes(algorithm);
@@ -92,7 +96,7 @@ export default function SimulatorPage() {
         </motion.div>
 
         <motion.div variants={itemVariants} className="lg:col-span-4 space-y-6 lg:sticky lg:top-32">
-          <AlgorithmSelect algorithm={algorithm} setAlgorithm={setAlgorithm} timeQuantum={timeQuantum} setTimeQuantum={setTimeQuantum} />
+          <AlgorithmSelect algorithm={algorithm} setAlgorithm={setAlgorithm} timeQuantum={timeQuantumInput} setTimeQuantum={setTimeQuantumInput} />
 
           {/* Algorithm profile — what this discipline is and how it decides */}
           {meta && (

@@ -3,8 +3,10 @@ import { ChevronDown } from 'lucide-react';
 interface Props {
   algorithm: string;
   setAlgorithm: (alg: string) => void;
-  timeQuantum: number;
-  setTimeQuantum: (tq: number) => void;
+  // Held as a string so the field can be emptied mid-edit; a numeric state
+  // turns "" into 0 and makes a lone digit impossible to backspace over.
+  timeQuantum: string;
+  setTimeQuantum: (tq: string) => void;
 }
 
 const QUANTUM_ALGORITHMS = ['rr', 'mlq', 'mlfq', 'lottery', 'stride', 'guaranteed', 'fairshare'];
@@ -55,10 +57,10 @@ export default function AlgorithmSelect({ algorithm, setAlgorithm, timeQuantum, 
           <div>
             <label className="block text-[10px] font-medium text-white/50 uppercase tracking-widest mb-2">Time Quantum</label>
             <input
-              type="number" min="1"
+              type="number" min="1" step="1" required placeholder="2"
               className="w-full bg-transparent border-b border-white/20 text-white text-xl font-light py-2 px-0 focus:outline-none focus:border-white transition-all rounded-none"
               value={timeQuantum}
-              onChange={(e) => setTimeQuantum(Number(e.target.value))}
+              onChange={(e) => setTimeQuantum(e.target.value)}
             />
           </div>
         )}
