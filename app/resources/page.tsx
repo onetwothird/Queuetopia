@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { ALGORITHM_META, ALGORITHM_FAMILIES } from '@/lib/algorithms-meta';
+import { SectionTimeline, SectionTimelineMobile, TimelineNode } from '@/components/layout/SectionTimeline';
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
@@ -170,10 +171,40 @@ const FORMULAS = [
   },
 ];
 
+/**
+ * Navigation registry for the reading timeline. Derived from `algorithms` and
+ * the family metadata so the rail can never drift out of order with the body
+ * content it links to.
+ */
+const SECTION_NODES: TimelineNode[] = [
+  { id: 'metrics', index: '01', label: 'Evaluative Metrics', short: 'Metrics' },
+  {
+    id: 'specifications',
+    index: '02',
+    label: 'Algorithm Specifications',
+    short: 'Algorithms',
+    entries: algorithms.map((algo) => {
+      const meta = ALGORITHM_META.find((m) => m.key === algo.id);
+      const family = ALGORITHM_FAMILIES.find((f) => f.id === meta?.family);
+      return {
+        id: `algo-${algo.id}`,
+        label: algo.name,
+        short: meta?.short ?? algo.id.toUpperCase(),
+        group: family?.label ?? 'Algorithms',
+        meta: meta?.kind ?? algo.classification,
+      };
+    }),
+  },
+  { id: 'matrix', index: '03', label: 'Comparison Matrix', short: 'Matrix' },
+];
+
 export default function ResourcesPage() {
   return (
     <main className="min-h-screen pt-32 pb-24 bg-[#050505] selection:bg-white selection:text-black">
-      <header className="max-w-5xl mx-auto px-6 md:px-12 mb-20">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_15rem] gap-x-16 items-start">
+      <div className="min-w-0">
+      <SectionTimelineMobile nodes={SECTION_NODES} />
+      <header className="mb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -191,7 +222,7 @@ export default function ResourcesPage() {
       </header>
 
       {/* ============================ 01 METRICS ============================ */}
-      <section className="max-w-5xl mx-auto px-6 md:px-12 mb-24">
+      <section id="metrics" className="mb-24 scroll-mt-28">
         <div className="border border-white/10 p-8 md:p-12 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-8 opacity-10 font-mono text-9xl leading-none pointer-events-none">∑</div>
           <h2 className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-8">01. Evaluative Metrics</h2>
@@ -217,7 +248,7 @@ export default function ResourcesPage() {
       </section>
 
       {/* ========================= 02 ALGORITHM SPECS ========================= */}
-      <section className="max-w-5xl mx-auto px-6 md:px-12 mb-24">
+      <section id="specifications" className="mb-24 scroll-mt-28">
         <h2 className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-4 border-b border-white/10 pb-4">
           02. Algorithm Specifications
         </h2>
@@ -225,11 +256,12 @@ export default function ResourcesPage() {
         {algorithms.map((algo) => (
           <motion.article
             key={algo.id}
+            id={`algo-${algo.id}`}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8, ease: EASE }}
-            className="flex flex-col lg:flex-row gap-12 group py-14 border-b border-white/5 last:border-0"
+            className="flex flex-col lg:flex-row gap-12 group py-14 border-b border-white/5 last:border-0 scroll-mt-28"
           >
             <div className="w-full lg:w-1/3 aspect-4/3 relative border border-white/10 overflow-hidden">
               <div className="absolute inset-0 bg-[#050505]/40 group-hover:bg-transparent transition-colors duration-700 z-10" />
@@ -274,7 +306,7 @@ export default function ResourcesPage() {
       </section>
 
       {/* ========================= 03 COMPARISON MATRIX ========================= */}
-      <section className="max-w-5xl mx-auto px-6 md:px-12">
+      <section id="matrix" className="scroll-mt-28">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -332,6 +364,14 @@ export default function ResourcesPage() {
           </div>
         </motion.div>
       </section>
+      </div>
+
+      {/* Sticky reading timeline: only room for it beside the prose on wide
+          viewports, so smaller screens use the collapsible bar above. */}
+      <aside className="hidden xl:block sticky top-32">
+        <SectionTimeline nodes={SECTION_NODES} />
+      </aside>
+      </div>
     </main>
   );
 }
