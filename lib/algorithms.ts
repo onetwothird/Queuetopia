@@ -111,7 +111,7 @@ function simulateNonPreemptive(
   const procs = cloneProcesses(processes);
   const finished = new Set<number>();
   const tracer = new Tracer();
-  let currentTime = Math.min(...procs.map((p) => p.arrival));
+  let currentTime = 0;
   const timeline: TimelineEvent[] = [];
 
   while (finished.size < procs.length) {
@@ -190,7 +190,7 @@ function simulatePreemptive(
   const n = procs.length;
   const tracer = new Tracer();
   let completed = 0;
-  let currentTime = Math.min(...procs.map((p) => p.arrival));
+  let currentTime = 0;
   const timeline: TimelineEvent[] = [];
 
   while (completed < n) {
@@ -317,7 +317,7 @@ function simulateQuantum(
   const procs = cloneProcesses(processes);
   const n = procs.length;
   const tracer = new Tracer();
-  let currentTime = Math.min(...procs.map((p) => p.arrival));
+  let currentTime = 0;
   const timeline: TimelineEvent[] = [];
   let completed = 0;
   let previous: Process | null = null;
@@ -400,7 +400,7 @@ export function simulateFCFS(processes: Process[]): SimulationResult {
   const procs = cloneProcesses(processes);
   const tracer = new Tracer();
   const finished = new Set<number>();
-  let currentTime = Math.min(...procs.map((p) => p.arrival));
+  let currentTime = 0;
   const timeline: TimelineEvent[] = [];
 
   // FCFS is the one non-preemptive discipline whose ready order is a stable
@@ -498,7 +498,7 @@ export function simulatePriorityNP(processes: Process[]): SimulationResult {
 export function simulateHRRN(processes: Process[]): SimulationResult {
   return simulateNonPreemptive(processes, (ready, currentTime) => {
     const ratio = (p: Process) => (currentTime - p.arrival + p.burst) / p.burst;
-    const sorted = [...ready].sort((a, b) => ratio(b) - ratio(a) || a.id - b.id);
+    const sorted = [...ready].sort((a, b) => ratio(b) - ratio(a) || a.arrival - b.arrival || a.id - b.id);
     const chosen = sorted[0];
     const candidates = candidatesFrom(
       ready,
@@ -516,7 +516,7 @@ export function simulateHRRN(processes: Process[]): SimulationResult {
 export function simulateSRTF(processes: Process[]): SimulationResult {
   return simulatePreemptive(
     processes,
-    (a, b) => a.remainingBurst - b.remainingBurst || a.id - b.id,
+    (a, b) => a.remainingBurst - b.remainingBurst || a.arrival - b.arrival || a.id - b.id,
     (ready, chosen) => {
       const candidates = candidatesFrom(ready, (p) => p.remainingBurst, (p, k) => `remaining ${ms(k)}`);
       const reason =
@@ -531,7 +531,7 @@ export function simulateSRTF(processes: Process[]): SimulationResult {
 export function simulatePriorityP(processes: Process[]): SimulationResult {
   return simulatePreemptive(
     processes,
-    (a, b) => a.priority - b.priority || a.id - b.id,
+    (a, b) => a.priority - b.priority || a.arrival - b.arrival || a.id - b.id,
     (ready, chosen) => {
       const candidates = candidatesFrom(ready, (p) => p.priority, (p, k) => `priority ${k} (lower runs first)`);
       const reason =
@@ -546,7 +546,7 @@ export function simulatePriorityP(processes: Process[]): SimulationResult {
 export function simulateEDF(processes: Process[]): SimulationResult {
   return simulatePreemptive(
     processes,
-    (a, b) => (a.deadline ?? Infinity) - (b.deadline ?? Infinity) || a.id - b.id,
+    (a, b) => (a.deadline ?? Infinity) - (b.deadline ?? Infinity) || a.arrival - b.arrival || a.id - b.id,
     (ready, chosen) => {
       const candidates = candidatesFrom(ready, (p) => p.deadline ?? Infinity, (p, k) =>
         Number.isFinite(k) ? `deadline ${ms(k)}` : 'no deadline set'
@@ -563,7 +563,7 @@ export function simulateEDF(processes: Process[]): SimulationResult {
 export function simulateRMS(processes: Process[]): SimulationResult {
   return simulatePreemptive(
     processes,
-    (a, b) => (a.period ?? Infinity) - (b.period ?? Infinity) || a.id - b.id,
+    (a, b) => (a.period ?? Infinity) - (b.period ?? Infinity) || a.arrival - b.arrival || a.id - b.id,
     (ready, chosen) => {
       const candidates = candidatesFrom(ready, (p) => p.period ?? Infinity, (p, k) =>
         Number.isFinite(k) ? `period ${ms(k)}` : 'no period set'
@@ -584,7 +584,7 @@ export function simulateRR(processes: Process[], quantum: number): SimulationRes
   const tracer = new Tracer();
   let i = 0;
   let completed = 0;
-  let currentTime = procs[0].arrival;
+  let currentTime = 0;
   const timeline: TimelineEvent[] = [];
 
   while (i < n && procs[i].arrival <= currentTime) queue.push(procs[i++]);
@@ -619,6 +619,9 @@ export function simulateRR(processes: Process[], quantum: number): SimulationRes
       running.response = currentTime - running.arrival;
     }
 
+    // Snapshot the queue as it stood at the decision, front first, before any
+    // arrivals during this slice are appended.
+    const queueAtDecision = [running.id, ...queue.map((p) => p.id)];
     const runFor = Math.min(quantum, running.remainingBurst);
     const start = currentTime;
     currentTime += runFor;
@@ -633,7 +636,7 @@ export function simulateRR(processes: Process[], quantum: number): SimulationRes
       running: running.id,
       endTime: currentTime,
       chosen: running.id,
-      readyQueue: queue.map((p) => p.id),
+      readyQueue: queueAtDecision,
       arrived: arrivedIds(procs, start),
       candidates: [candidatesFrom([running], (p) => p.remainingBurst + runFor, (p, k) => `ran ${ms(k)} this slice`)[0]],
       arrivals: arrivalIdsAt(procs, start),
@@ -661,7 +664,7 @@ export function simulateMLQ(processes: Process[], quantum: number): SimulationRe
   const procs = cloneProcesses(processes);
   const n = procs.length;
   const tracer = new Tracer();
-  let currentTime = Math.min(...procs.map((p) => p.arrival));
+  let currentTime = 0;
   const timeline: TimelineEvent[] = [];
   let completed = 0;
   const q1: Process[] = [];
@@ -780,7 +783,7 @@ export function simulateMLFQ(processes: Process[], baseQuantum: number): Simulat
   const arrived = new Set<number>();
   const usedInQuantum = new Map<number, number>();
   const tracer = new Tracer();
-  let currentTime = Math.min(...procs.map((p) => p.arrival));
+  let currentTime = 0;
   const timeline: TimelineEvent[] = [];
   let completed = 0;
 
