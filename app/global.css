@@ -55,3 +55,9 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+/* The custom cursor (components/system/CursorEffect.tsx) replaces the native
+   pointer while it is switched on, so only one cursor is ever visible. */
+html.custom-cursor,
+html.custom-cursor * {
+  cursor: none !important;
+}
