@@ -90,7 +90,7 @@ export default function ProcessForm({ algorithm, onAddProcess, onClear }: Props)
 
   return (
     <div className="bg-transparent p-6 border border-white/10">
-      <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-6">02. Inject Data</h2>
+      <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-6">02. Add Processes</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-2 gap-8">
           <NumberField label="Arrival Time" value={arrival} onChange={setArrival} min={0} placeholder="0" />

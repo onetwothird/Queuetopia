@@ -59,7 +59,7 @@ export default function ProcessTable({ processes, algorithm, onDelete, onSimulat
   return (
     <div className="bg-transparent p-6 border border-white/10">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
-        <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">03. Active Queue</h2>
+        <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">03. Process Table</h2>
         <button
           type="button"
           onClick={onSimulate}

@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Process, SimulationResult } from '@/lib/types';
 import { runSimulation } from '@/lib/algorithms';
+import { useSystemPrefs } from '@/components/system/SystemPrefs';
 import { ALGORITHM_BY_KEY } from '@/lib/algorithms-meta';
 import AlgorithmSelect from '@/components/simulator/AlgorithmSelect';
 import ProcessForm from '@/components/simulator/ProcessForm';
 import ProcessTable from '@/components/simulator/ProcessTable';
-import GanttChart from '@/components/visualizations/GanttChart';
-import RrFlow from '@/components/visualizations/RrFlow';
+import ManualSolution from '@/components/visualizations/ManualSolution';
 import { FlaskConical, ArrowRight } from 'lucide-react';
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -27,28 +27,33 @@ const itemVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
 };
 
-// Algorithms whose scheduling decisions are made on fixed time slices; these
-// surface the Round Robin-style cyclic preemption log after a run.
-const QUANTUM_ALGORITHMS = ['rr', 'mlq', 'mlfq', 'lottery', 'stride', 'guaranteed', 'fairshare'];
+const noopSubscribe = () => () => {};
 
 export default function SimulatorPage() {
   const [processes, setProcesses] = useState<Process[]>([]);
   const [algorithm, setAlgorithm] = useState<string>('fcfs');
   const [timeQuantumInput, setTimeQuantumInput] = useState<string>('2');
   const [result, setResult] = useState<SimulationResult | null>(null);
+  const { play } = useSystemPrefs();
+  // The algorithm and quantum the current result was solved with, so editing
+  // the controls afterwards never relabels an answer computed under old inputs.
+  const [solvedWith, setSolvedWith] = useState({ algorithm: 'fcfs', quantum: 2, run: 0 });
 
   // The input is kept as a string so it can be cleared while editing; the
   // engine always receives a valid integer, never NaN or 0.
   const timeQuantum = Math.max(1, Math.trunc(Number(timeQuantumInput)) || 2);
 
   const meta = ALGORITHM_BY_KEY[algorithm];
-  const showPreemptionLog = QUANTUM_ALGORITHMS.includes(algorithm);
 
   // Deep links like /simulator?algorithm=rr (used by the resources pages) are
   // applied by adjusting state during render — a legal React pattern that
   // avoids effects and hydration mismatches. Applied at most once.
-  const [urlAlgorithm] = useState<string | null>(() =>
-    typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('algorithm')
+  // Read through useSyncExternalStore so the server and the hydrating client
+  // both see null, and the real query value arrives on the next render.
+  const urlAlgorithm = useSyncExternalStore(
+    noopSubscribe,
+    () => new URLSearchParams(window.location.search).get('algorithm'),
+    () => null
   );
   const [urlApplied, setUrlApplied] = useState(false);
   if (!urlApplied && urlAlgorithm && ALGORITHM_BY_KEY[urlAlgorithm]) {
@@ -78,6 +83,8 @@ export default function SimulatorPage() {
   const handleSimulate = () => {
     if (processes.length === 0) return;
     setResult(runSimulation(algorithm, processes, timeQuantum));
+    play('solve');
+    setSolvedWith((prev) => ({ algorithm, quantum: timeQuantum, run: prev.run + 1 }));
   };
 
   return (
@@ -89,10 +96,15 @@ export default function SimulatorPage() {
         className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
       >
         <motion.div variants={itemVariants} className="lg:col-span-12 mb-4 border-b border-white/10 pb-8">
-          <p className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-4">Workspace</p>
+          <p className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-4">CPU Scheduling Solver</p>
           <h1 className="text-4xl md:text-5xl font-light tracking-tight text-white">
-            CONFIGURE &amp; EXECUTE
+            SOLVE A PROBLEM
           </h1>
+          <p className="mt-4 max-w-2xl text-sm text-white/50 leading-relaxed">
+            Enter the processes from your exercise, choose the algorithm, and press{' '}
+            <span className="text-white/80">Execute Simulation</span>. You get the full worked solution — Gantt chart,
+            ready queue at every decision, and each CT, TAT, WT and RT — which you can replay one step at a time.
+          </p>
         </motion.div>
 
         <motion.div variants={itemVariants} className="lg:col-span-4 space-y-6 lg:sticky lg:top-32">
@@ -155,10 +167,12 @@ export default function SimulatorPage() {
                 transition={{ duration: 0.5, ease: EASE }}
                 className="space-y-6"
               >
-                <GanttChart timeline={result.timeline} result={result} />
-                {showPreemptionLog && result.timeline.some((e) => e.process !== 'idle') && (
-                  <RrFlow timeline={result.timeline} timeQuantum={timeQuantum} />
-                )}
+                <ManualSolution
+                  key={solvedWith.run}
+                  result={result}
+                  algorithm={solvedWith.algorithm}
+                  timeQuantum={solvedWith.quantum}
+                />
               </motion.div>
             ) : (
               <motion.div
@@ -173,9 +187,9 @@ export default function SimulatorPage() {
                   Awaiting Execution
                 </p>
                 <p className="text-sm text-white/40 max-w-sm leading-relaxed">
-                  Add at least one process, select a discipline, then press{' '}
-                  <span className="text-white/70">Execute Simulation</span> to render the Gantt
-                  timeline, per-process metrics, and CPU utilization.
+                  Add at least one process, choose an algorithm, then press{' '}
+                  <span className="text-white/70">Execute Simulation</span> to see the worked
+                  solution: Gantt chart, computation table, and averages.
                 </p>
                 <ArrowRight className="w-4 h-4 text-white/20 mt-8 animate-pulse" strokeWidth={1.5} />
               </motion.div>

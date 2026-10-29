@@ -34,7 +34,7 @@ export default function AlgorithmSelect({ algorithm, setAlgorithm, timeQuantum, 
 
   return (
     <div className="bg-transparent p-6 border border-white/10">
-      <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-6">01. Parameters</h2>
+      <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-6">01. Choose Algorithm</h2>
       <div className="space-y-6">
         <div>
           <label className="block text-[10px] font-medium text-white/50 uppercase tracking-widest mb-2">Algorithm</label>
