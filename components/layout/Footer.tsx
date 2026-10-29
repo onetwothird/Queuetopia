@@ -21,9 +21,9 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/10 bg-[#070707]">
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
+        <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-12 gap-12 sm:gap-10 xl:gap-16">
           {/* Brand */}
-          <div className="md:col-span-5">
+          <div className="sm:col-span-3 lg:col-span-5">
             <Link href="/" className="inline-flex items-center">
               <Image
                 src="/logo.png"
@@ -51,7 +51,7 @@ export default function Footer() {
           </div>
 
           {/* Navigation */}
-          <div className="md:col-span-3">
+          <div className="min-w-0 lg:col-span-3">
             <h3 className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/40 mb-6">
               Navigate
             </h3>
@@ -71,7 +71,7 @@ export default function Footer() {
           </div>
 
           {/* Algorithm coverage */}
-          <div className="md:col-span-2">
+          <div className="min-w-0 lg:col-span-2">
             <h3 className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/40 mb-6">
               Algorithm Families
             </h3>
@@ -84,7 +84,7 @@ export default function Footer() {
           </div>
 
           {/* Stack */}
-          <div className="md:col-span-2">
+          <div className="min-w-0 lg:col-span-2">
             <h3 className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/40 mb-6">
               Course Topics
             </h3>
