@@ -2,19 +2,19 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExternalLink, Cpu, Rows3, Gauge, Timer } from 'lucide-react';
+import { ArrowRight, Cpu, Rows3, Gauge, Timer } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
-  { href: '/simulator', label: 'Simulator' },
-  { href: '/resources', label: 'Resources' },
+  { href: '/simulator', label: 'Solver' },
+  { href: '/resources', label: 'Study Guide' },
 ];
 
-const TECH_STACK = [
-  { icon: Cpu, label: 'Next.js / React / TypeScript' },
-  { icon: Rows3, label: 'Tailwind CSS v4' },
-  { icon: Gauge, label: 'Framer Motion' },
-  { icon: Timer, label: 'Pure TypeScript engine' },
+const COURSE_TOPICS = [
+  { icon: Cpu, label: 'CPU Scheduling' },
+  { icon: Rows3, label: 'Gantt Charts' },
+  { icon: Timer, label: 'Ready Queues' },
+  { icon: Gauge, label: 'Performance Metrics' },
 ];
 
 export default function Footer() {
@@ -34,21 +34,19 @@ export default function Footer() {
               />
             </Link>
             <p className="mt-6 text-sm text-white/50 leading-relaxed max-w-sm">
-              A deterministic CPU scheduling simulator for the classroom and the
-              lab. Queue up processes, run them through fifteen algorithms, and
-              inspect the execution timeline, per-process metrics, and CPU
-              utilization — all computed by a pure, dependency-free engine.
+              A study companion for Operating Systems students. Enter the process
+              table from your exercise, pick an algorithm, and follow a complete
+              worked solution — Gantt chart, ready queue, and every CT, TAT, WT
+              and RT computation — exactly as you would write it on paper.
             </p>
             <div className="mt-8 flex flex-col gap-3">
-              <a
-                href="https://github.com/onetwothird/Queuetopia"
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                href="/simulator"
                 className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] uppercase text-white border border-white/20 px-5 py-3 w-fit hover:bg-white hover:text-black transition-colors"
               >
-                <ExternalLink className="w-4 h-4" strokeWidth={1.5} />
-                View Source on GitHub
-              </a>
+                Solve a Problem
+                <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
+              </Link>
             </div>
           </div>
 
@@ -69,15 +67,6 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  href="/simulator"
-                  className="group inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors"
-                >
-                  <span className="w-0 group-hover:w-4 h-px bg-white/60 transition-all duration-300" />
-                  Run a Simulation
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -97,10 +86,10 @@ export default function Footer() {
           {/* Stack */}
           <div className="md:col-span-2">
             <h3 className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/40 mb-6">
-              Stack
+              Course Topics
             </h3>
             <ul className="space-y-4">
-              {TECH_STACK.map((item) => (
+              {COURSE_TOPICS.map((item) => (
                 <li key={item.label} className="flex items-center gap-2 text-sm text-white/60">
                   <item.icon className="w-3.5 h-3.5 text-white/30 shrink-0" strokeWidth={1.5} />
                   {item.label}
@@ -112,7 +101,7 @@ export default function Footer() {
 
         <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <p className="text-[10px] tracking-[0.2em] uppercase text-white/30">
-            © {new Date().getFullYear()} QueueTopia — Computational Systems Lab
+            © {new Date().getFullYear()} QueueTopia — Learning Operating Systems
           </p>
           <p className="font-mono text-[10px] text-white/30">
             FCFS · SJF · SRTF · ROUND ROBIN · MLFQ · EDF · RMS + 8 MORE

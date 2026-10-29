@@ -54,11 +54,10 @@ export default function Navigation() {
         </Link>
         
         <div className="hidden md:flex items-center gap-12 text-[10px] font-bold tracking-[0.2em] text-white/70 uppercase">
-          <Link href="/simulator" className="hover:text-white transition-colors">Simulator</Link>
-          <Link href="/resources" className="hover:text-white transition-colors">Resources</Link>
-          <a href="https://github.com/onetwothird/Queuetopia" target="_blank" rel="noreferrer" className="text-white border border-white/20 rounded-full px-6 py-2 hover:bg-white hover:text-black transition-all">
-            Open Source
-          </a>
+          <Link href="/resources" className="hover:text-white transition-colors">Study Guide</Link>
+          <Link href="/simulator" className="text-white border border-white/20 rounded-full px-6 py-2 hover:bg-white hover:text-black transition-all">
+            Start Solving
+          </Link>
         </div>
 
         <button 
@@ -81,11 +80,10 @@ export default function Navigation() {
           >
             <div className="flex flex-col items-center gap-8 text-sm font-bold tracking-[0.2em] text-white/70 uppercase mt-12">
               <Link href="/" onClick={closeMenu} className="hover:text-white transition-colors">Home</Link>
-              <Link href="/simulator" onClick={closeMenu} className="hover:text-white transition-colors">Simulator</Link>
-              <Link href="/resources" onClick={closeMenu} className="hover:text-white transition-colors">Resources</Link>
-              <a href="https://github.com/onetwothird/Queuetopia" target="_blank" rel="noreferrer" onClick={closeMenu} className="text-white border border-white/20 rounded-full px-8 py-4 hover:bg-white hover:text-black transition-all mt-4">
-                View on GitHub
-              </a>
+              <Link href="/resources" onClick={closeMenu} className="hover:text-white transition-colors">Study Guide</Link>
+              <Link href="/simulator" onClick={closeMenu} className="text-white border border-white/20 rounded-full px-8 py-4 hover:bg-white hover:text-black transition-all mt-4">
+                Start Solving
+              </Link>
             </div>
           </motion.div>
         )}

@@ -203,24 +203,24 @@ export default function HomePage() {
           <div className="lg:col-span-7">
             <motion.p variants={fadeUp} className="inline-flex items-center gap-3 text-[10px] md:text-xs font-bold tracking-[0.2em] text-white/50 uppercase mb-8 border-b border-white/10 pb-2">
               <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-              Computational Systems Lab
+              Operating Systems · CPU Scheduling
             </motion.p>
 
             <motion.h1
               variants={fadeUp}
               className="text-5xl sm:text-6xl md:text-7xl lg:text-[6.5rem] leading-[0.92] font-light tracking-tighter uppercase"
             >
-              Deterministic
+              Learn
               <br />
               Scheduling
               <br />
-              <span className="text-white/40">Analysis.</span>
+              <span className="text-white/40">By Solving.</span>
             </motion.h1>
 
             <motion.p variants={fadeUp} className="mt-8 md:mt-10 max-w-xl text-sm font-medium tracking-wide text-white/60 leading-relaxed">
-              Queue up processes, run them through <span className="text-white">fifteen scheduling algorithms</span>,
-              and inspect the resulting execution timeline, per-process metrics, and CPU utilization — computed by
-              a pure, dependency-free simulation engine.
+              Built for students taking <span className="text-white">Operating Systems</span>. Enter the process table
+              from your exercise, choose one of fifteen scheduling algorithms, and follow a step-by-step worked
+              solution — Gantt chart, ready queue, and every CT, TAT, WT and RT — the same way you solve it on paper.
             </motion.p>
 
             <motion.div variants={fadeUp} className="mt-10 md:mt-12 flex flex-wrap items-center gap-4">
@@ -228,14 +228,14 @@ export default function HomePage() {
                 href="/simulator"
                 className="group inline-flex items-center gap-3 bg-white text-black text-[10px] font-bold tracking-[0.25em] uppercase px-10 py-5 hover:bg-white/90 transition-colors"
               >
-                Open Simulator
+                Start Solving
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" strokeWidth={2} />
               </Link>
               <Link
                 href="/resources"
                 className="inline-flex items-center gap-3 border border-white/20 text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase px-10 py-5 hover:bg-white hover:text-black transition-all"
               >
-                Algorithm Reference
+                Open Study Guide
               </Link>
             </motion.div>
           </div>
@@ -266,7 +266,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-y-12">
           {[
             { icon: Rows3, to: 15, suffix: '', label: 'Scheduling Algorithms', sub: 'Non-preemptive → real-time' },
-            { icon: FlaskConical, to: 4, suffix: '', label: 'Shared Simulation Runners', sub: 'From a single engine' },
+            { icon: FlaskConical, to: 5, suffix: '', label: 'Worked Solution Steps', sub: 'Given → Gantt → table → averages' },
             { icon: Gauge, to: 6, suffix: '', label: 'Evaluative Metrics', sub: 'Turnaround · waiting · response' },
             { icon: Timer, to: 100, suffix: '%', label: 'Deterministic Execution', sub: 'Seeded PRNG, no surprises' },
           ].map((stat, i) => (
@@ -305,9 +305,9 @@ export default function HomePage() {
           </motion.p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
             {[
-              { icon: Cpu, title: 'Multi-Heuristic Engine', desc: 'Run comparative analysis across all fifteen scheduling models — FCFS through RMS — from a single pure, framework-independent simulation core.' },
-              { icon: Activity, title: 'Empirical Metrics', desc: 'Every run resolves per-process completion, turnaround, waiting, and response — plus aggregate CPU saturation and makespan.' },
-              { icon: FastForward, title: 'Tick-Accurate Timeline', desc: 'Discrete, tick-by-tick Gantt visualization that makes context-switch overhead, idle gaps, and starvation vectors visible.' },
+              { icon: Cpu, title: 'Every Algorithm in the Syllabus', desc: 'FCFS, SJF, SRTF, Priority, Round Robin and HRRN, plus multilevel, proportional-share and real-time schedulers for advanced topics.' },
+              { icon: Activity, title: 'Show-Your-Solution Tables', desc: 'Each answer writes out CT, TAT = CT − AT, WT = TAT − BT and RT for every process, then the averages with the full fraction.' },
+              { icon: FastForward, title: 'Step-by-Step Gantt Chart', desc: 'Reveal the chart one decision at a time, with the ready queue and remaining burst at every arrival and completion — like a teacher on the board.' },
             ].map((feature, idx) => (
               <motion.div
                 key={idx}
@@ -337,21 +337,21 @@ export default function HomePage() {
               transition={{ duration: 0.8, ease: EASE }}
               className="lg:sticky lg:top-32"
             >
-              <p className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-6">02. Methodology</p>
+              <p className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-6">02. How It Works</p>
               <h2 className="text-4xl md:text-5xl font-light tracking-tight leading-tight mb-8">
-                COMPUTATIONAL
+                SOLVE IT
                 <br />
-                EXECUTION.
+                LIKE ON PAPER.
               </h2>
               <p className="text-white/60 leading-relaxed text-sm max-w-md">
-                The simulator constructs a strictly governed single-core ready-queue environment. By introducing
-                arbitrary arrival matrices and CPU burst requirements, researchers can empirically validate
-                theoretical scheduling constraints — and compare algorithm trade-offs side by side.
+                QueueTopia models a single CPU and its ready queue, the setup used in Operating Systems lectures and
+                exams. Enter the problem from your worksheet and you get the full solution laid out the way your
+                instructor writes it, so you can check every line of your own answer.
               </p>
               <div className="mt-10 font-mono text-[11px] text-white/40 space-y-2">
-                <p className="flex items-center gap-3"><span className="w-2 h-2 bg-white/40 inline-block" /> arrival · burst · priority matrix</p>
-                <p className="flex items-center gap-3"><span className="w-2 h-2 bg-white/40 inline-block" /> 1ms preemption resolution</p>
-                <p className="flex items-center gap-3"><span className="w-2 h-2 bg-white/40 inline-block" /> merged timeline → Gantt render</p>
+                <p className="flex items-center gap-3"><span className="w-2 h-2 bg-white/40 inline-block" /> given: process · AT · BT (· priority)</p>
+                <p className="flex items-center gap-3"><span className="w-2 h-2 bg-white/40 inline-block" /> Gantt chart from t = 0, with idle gaps</p>
+                <p className="flex items-center gap-3"><span className="w-2 h-2 bg-white/40 inline-block" /> CT · TAT · WT · RT → averages</p>
               </div>
             </motion.div>
 
@@ -359,9 +359,9 @@ export default function HomePage() {
               <div className="absolute left-5 top-2 bottom-2 w-px bg-white/10" aria-hidden="true" />
               <div className="space-y-10">
                 {[
-                  { icon: Layers, title: 'Define Global Constraints', desc: 'Initialize the algorithmic model and establish global preemption variables, such as the requisite time quantum q for cyclical operations.' },
-                  { icon: GitCommit, title: 'Populate Data Structures', desc: 'Inject discrete processes into the queue array, defining chronological arrival constraints, required processing bursts, and hierarchical weights.' },
-                  { icon: Clock, title: 'Compile and Execute', desc: 'Run the analytical engine to resolve the queue structure into chronological sequence maps and final throughput calculations.' },
+                  { icon: Layers, title: 'Choose the Algorithm', desc: 'Pick the scheduling algorithm your problem asks for. For Round Robin and other time-sliced schedulers, set the time quantum q.' },
+                  { icon: GitCommit, title: 'Enter the Process Table', desc: 'Type in each process exactly as given in your exercise — arrival time, burst time, and priority when the algorithm needs it.' },
+                  { icon: Clock, title: 'Solve and Check Your Work', desc: 'Step through the Gantt chart decision by decision, then compare your CT, TAT, WT and averages against the worked solution.' },
                 ].map((step, idx) => (
                   <motion.div
                     key={idx}
@@ -494,25 +494,25 @@ export default function HomePage() {
           className="max-w-2xl"
         >
           <BookOpen className="mx-auto w-8 h-8 text-white/25 mb-8" strokeWidth={1} />
-          <p className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-6">Initialize Workspace</p>
+          <p className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-6">Ready for your exam?</p>
           <h2 className="text-4xl md:text-5xl font-light tracking-tight leading-tight mb-10 uppercase">
-            Run your first
+            Solve your first
             <br />
-            schedule now.
+            problem now.
           </h2>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/simulator"
               className="group inline-flex items-center gap-4 bg-white text-black text-[10px] font-bold tracking-[0.2em] uppercase px-12 py-5 hover:bg-white/90 transition-all"
             >
-              Open Simulator
+              Start Solving
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
             </Link>
             <Link
               href="/resources"
               className="inline-flex items-center gap-4 border border-white/20 text-white/80 text-[10px] font-bold tracking-[0.2em] uppercase px-12 py-5 hover:bg-white hover:text-black transition-all"
             >
-              Read the Theory
+              Open Study Guide
             </Link>
           </div>
         </motion.div>

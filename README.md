@@ -2,7 +2,7 @@
 
 # QueueTopia
 
-**A deterministic CPU scheduling simulator for the classroom and the lab.**
+**An educational CPU scheduling solver for Operating Systems students.**
 
 ![Next.js](https://img.shields.io/badge/Next.js-App%20Router-black?logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?logo=typescript&logoColor=white)
@@ -26,8 +26,7 @@ Queue up processes, run them through fifteen scheduling algorithms, and inspect 
 - [Algorithm Reference](#algorithm-reference)
 - [UI Design Notes](#ui-design-notes)
 - [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
+- [Copyright](#copyright)
 
 ---
 
@@ -214,14 +213,6 @@ Adjacent blocks belonging to the same process (or idle stretches) are merged via
 
 ---
 
-## Contributing
+## Copyright
 
-Issues and pull requests are welcome. If you're adding a new algorithm:
-
-1. Implement it as a pure function in `lib/algorithms.ts` following the existing runner patterns.
-2. Register it in the `runSimulation` dispatcher and `ALGORITHM_OPTIONS` in `AlgorithmSelect.tsx`.
-3. Add any new fields it needs to `Process` (`lib/types.ts`), `ProcessForm.tsx`, and `ProcessTable.tsx`.
-
-## License
-
-No license file is currently included in this repository. Add a `LICENSE` file (e.g. MIT, Apache-2.0) before distributing or accepting external contributions.
+© QueueTopia. All rights reserved. This is a proprietary educational project for Operating Systems students; it is not open source, and the code may not be copied, redistributed, or modified without permission.
