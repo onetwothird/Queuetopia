@@ -200,19 +200,19 @@ const SECTION_NODES: TimelineNode[] = [
 
 export default function ResourcesPage() {
   return (
-    <main className="min-h-screen pt-32 pb-24 bg-[#050505] selection:bg-white selection:text-black">
+    <main className="min-h-screen pt-28 md:pt-32 pb-16 md:pb-24 bg-[#050505] selection:bg-white selection:text-black">
       <div className="max-w-6xl mx-auto px-6 md:px-12 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_15rem] gap-x-16 items-start">
       <div className="min-w-0">
       <SectionTimelineMobile nodes={SECTION_NODES} />
-      <header className="mb-20">
+      <header className="mt-10 xl:mt-0 mb-14 md:mb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: EASE }}
         >
           <p className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-4">Theoretical Foundations</p>
-          <h1 className="text-4xl md:text-5xl font-light tracking-tight text-white mb-8 uppercase">
-            Algorithm Architecture & <br /> Mathematical Models
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight text-white mb-6 md:mb-8 uppercase wrap-break-word">
+            Algorithm Architecture & <br className="hidden sm:block" /> Mathematical Models
           </h1>
           <p className="text-white/60 leading-relaxed text-sm max-w-2xl">
             A formal analysis of operating system process management, detailing the mathematical metrics used to
@@ -222,12 +222,12 @@ export default function ResourcesPage() {
       </header>
 
       {/* ============================ 01 METRICS ============================ */}
-      <section id="metrics" className="mb-24 scroll-mt-28">
-        <div className="border border-white/10 p-8 md:p-12 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-10 font-mono text-9xl leading-none pointer-events-none">∑</div>
+      <section id="metrics" className="mb-16 md:mb-24 scroll-mt-28">
+        <div className="border border-white/10 p-5 sm:p-8 md:p-12 relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-4 sm:p-8 opacity-10 font-mono text-7xl sm:text-9xl leading-none pointer-events-none" aria-hidden="true">∑</div>
           <h2 className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-8">01. Evaluative Metrics</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
             {FORMULAS.map((formula, idx) => (
               <motion.div
                 key={formula.title}
@@ -238,7 +238,8 @@ export default function ResourcesPage() {
               >
                 <h3 className="text-lg font-medium text-white mb-2">{formula.title}</h3>
                 <p className="text-sm text-white/60 leading-relaxed mb-4">{formula.desc}</p>
-                <div className="bg-[#0a0a0a] border border-white/5 p-4 flex justify-center text-white/90 font-mono text-lg tracking-wide">
+                <div className="bg-[#0a0a0a] border border-white/5 p-4 text-center text-white/90 font-mono text-base sm:text-lg tracking-wide">
+                  {/* Plain inline flow, not flex: a flex row would lift each <sub> to the top as its own item. */}
                   {formula.formula}
                 </div>
               </motion.div>
@@ -248,7 +249,7 @@ export default function ResourcesPage() {
       </section>
 
       {/* ========================= 02 ALGORITHM SPECS ========================= */}
-      <section id="specifications" className="mb-24 scroll-mt-28">
+      <section id="specifications" className="mb-16 md:mb-24 scroll-mt-28">
         <h2 className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-4 border-b border-white/10 pb-4">
           02. Algorithm Specifications
         </h2>
@@ -261,22 +262,22 @@ export default function ResourcesPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8, ease: EASE }}
-            className="flex flex-col lg:flex-row gap-12 group py-14 border-b border-white/5 last:border-0 scroll-mt-28"
+            className="flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-12 group py-10 md:py-14 border-b border-white/5 last:border-0 scroll-mt-28"
           >
-            <div className="w-full lg:w-1/3 aspect-4/3 relative border border-white/10 overflow-hidden">
+            <div className="w-full lg:w-1/3 aspect-video sm:aspect-[2/1] lg:aspect-4/3 relative border border-white/10 overflow-hidden">
               <div className="absolute inset-0 bg-[#050505]/40 group-hover:bg-transparent transition-colors duration-700 z-10" />
               <Image
                 src={algo.image}
                 alt={`${algo.name} architectural representation`}
                 fill
-                sizes="(max-width: 768px) 100vw, 33vw"
+                sizes="(max-width: 1024px) 100vw, 33vw"
                 className="object-cover scale-105 group-hover:scale-100 transition-transform duration-1000 grayscale opacity-70"
               />
             </div>
 
-            <div className="w-full lg:w-2/3 flex flex-col justify-center">
-              <div className="flex flex-wrap items-center gap-4 mb-3">
-                <h3 className="text-2xl font-light tracking-tight text-white">{algo.name}</h3>
+            <div className="w-full min-w-0 lg:w-2/3 flex flex-col justify-center">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4 md:mb-3">
+                <h3 className="text-xl sm:text-2xl font-light tracking-tight text-white">{algo.name}</h3>
                 <span className="border border-white/20 px-3 py-1 text-[9px] font-bold tracking-[0.2em] text-white/60 uppercase">
                   {algo.classification}
                 </span>
@@ -288,7 +289,7 @@ export default function ResourcesPage() {
 
               <p className="text-sm text-white/50 leading-relaxed">{algo.details}</p>
 
-              <div className="mt-6 flex items-center gap-4">
+              <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-3">
                 <Link
                   href={`/simulator?algorithm=${algo.id}`}
                   className="inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.2em] text-white/60 border border-white/20 px-4 py-2.5 hover:bg-white hover:text-black transition-colors"
@@ -316,7 +317,7 @@ export default function ResourcesPage() {
           <h2 className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-4 border-b border-white/10 pb-4">
             03. Algorithm Comparison Matrix
           </h2>
-          <p className="text-sm text-white/50 leading-relaxed mb-10 max-w-2xl">
+          <p className="text-sm text-white/50 leading-relaxed mb-8 md:mb-10 max-w-2xl">
             A condensed reference of every algorithm implemented in the QueueTopia engine, grouped by family:
             governing data structure, scheduling kind, and whether the time quantum drives dispatch decisions.
           </p>
@@ -325,7 +326,35 @@ export default function ResourcesPage() {
             {ALGORITHM_FAMILIES.map((family) => (
               <div key={family.id}>
                 <h3 className="text-sm font-medium text-white/80 tracking-tight mb-4">{family.label}</h3>
-                <div className="overflow-x-auto border border-white/10">
+                {/* Phones: one card per algorithm instead of a sideways-scrolling table. */}
+                <ul className="sm:hidden border border-white/10 divide-y divide-white/10">
+                  {ALGORITHM_META.filter((a) => a.family === family.id).map((algo) => (
+                    <li key={algo.key}>
+                      <Link
+                        href={`/simulator?algorithm=${algo.key}`}
+                        className="flex items-start gap-3 p-4 hover:bg-white/5 transition-colors"
+                        aria-label={`Run ${algo.name} in simulator`}
+                      >
+                        <div className="min-w-0 flex-1">
+                          <p className="font-mono text-sm text-white/85">
+                            {algo.short}
+                            <span className="ml-2 font-sans text-white">{algo.name}</span>
+                          </p>
+                          <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 font-mono text-[11px]">
+                            <dt className="text-white/35 uppercase tracking-[0.15em] text-[9px] pt-0.5">Kind</dt>
+                            <dd className="text-white/60">{algo.kind}</dd>
+                            <dt className="text-white/35 uppercase tracking-[0.15em] text-[9px] pt-0.5">Mechanism</dt>
+                            <dd className="text-white/60">{algo.structure}</dd>
+                            <dt className="text-white/35 uppercase tracking-[0.15em] text-[9px] pt-0.5">Quantum</dt>
+                            <dd className="text-white/60">{algo.quantum ? 'Yes' : '—'}</dd>
+                          </dl>
+                        </div>
+                        <ArrowUpRight className="w-4 h-4 text-white/40 shrink-0 mt-0.5" strokeWidth={1.5} />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <div className="hidden sm:block overflow-x-auto border border-white/10">
                   <table className="w-full text-left font-mono text-sm">
                     <thead>
                       <tr className="border-b border-white/10 text-[9px] uppercase tracking-[0.2em] text-white/40">

@@ -267,7 +267,9 @@ export function SectionTimelineMobile({ nodes }: { nodes: TimelineNode[] }) {
 
   return (
     <>
-      <div className="xl:hidden sticky top-20 z-40 -mx-6 md:-mx-12 px-6 md:px-12 py-3 bg-[#050505]/90 backdrop-blur-md border-y border-white/10">
+      {/* Pinned to top-0: the site nav slides away once the page scrolls, so
+          any offset here would leave an empty band above the bar. */}
+      <div className="xl:hidden sticky top-0 z-40 -mx-6 md:-mx-12 px-6 md:px-12 py-3 bg-[#050505]/90 backdrop-blur-md border-y border-white/10">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
