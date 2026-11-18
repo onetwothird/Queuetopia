@@ -11,7 +11,21 @@
 
 Queue up processes, run them through fifteen scheduling algorithms, and inspect the resulting execution timeline, per-process metrics, and CPU utilization — computed by a pure, dependency-free simulation engine.
 
+**[Try it live → queuetopia.vercel.app](https://queuetopia.vercel.app)**
+
+<img src="queuetopia-screenshots/01-home-hero.png" width="100%" alt="QueueTopia landing page" />
+
 </div>
+
+### Screenshots
+
+| Solver | Step-by-step Gantt chart |
+|---|---|
+| <img src="queuetopia-screenshots/07-solver-input-panel.png" alt="Solver input panel" /> | <img src="queuetopia-screenshots/08-solver-step-by-step-gantt.png" alt="Step-by-step Gantt chart" /> |
+| **Full worked solution** | **Study guide comparison matrix** |
+| <img src="queuetopia-screenshots/13-solver-full-worked-solution.png" alt="Full worked solution" /> | <img src="queuetopia-screenshots/17-study-guide-comparison-matrix.png" alt="Algorithm comparison matrix" /> |
+
+<p align="center"><img src="queuetopia-screenshots/22-mobile-solver.png" width="260" alt="Solver on mobile" /></p>
 
 ---
 
@@ -79,8 +93,8 @@ The simulator is deliberately split into two independent halves:
 ### Installation
 
 ```bash
-git clone <this-repository-url>
-cd queuetopia
+git clone https://github.com/onetwothird/Queuetopia.git
+cd Queuetopia
 npm install
 ```
 
